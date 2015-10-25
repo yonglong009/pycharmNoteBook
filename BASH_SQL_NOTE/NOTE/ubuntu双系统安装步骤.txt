@@ -1,0 +1,30 @@
+1、下载EasyBCD，这个软件可以实现自由MBR引导的功能，我们就是使用它的这个功能来实现Windows7下安装Linux，
+和引导启动双系统的选项的
+2、随便下载个Linux包ubuntu-14.04.3-desktop-i386.iso
+3、把下载好的Linux包放到某一个盘的根目录下，如F:\ubuntu-14.04.3-desktop-i386.iso
+4、用压缩工具打开ubuntu*.iso，把里面的casper目录下的initrd.lz和vmlinuz两个文件解压出来，并放到F盘根目录下
+5、打开EasyBCD，依次点击“Add New Entry-->NeoGrub”，点击Install，再点Config，此时弹出一个文本文件来让你编辑，
+   在最后加入：---F盘：
+title Install Ubuntu 14.04 LTS
+root (hd0,6)
+kernel (hd0,6)/vmlinuz boot=casper iso-scan/filename=/ubuntu-14.04.3-desktop-i386.iso ro quiet splash locale=zh_CN.UTF-8
+initrd (hd0,6)/initrd.lz
+
+6、点击“Edit Boot Menu”，
+看看有没有刚才我们添加的NeoGrub，如果有，重启电脑，重启过程中发现多了一个NeoGrub的引导项，选择此项，回车，
+直接进入linux的liveCD系统，此时，先别忙着点安装Linux，使用组合键“CTRL+ALT+F2”进入命令行模式，
+输入命令：sudo umount -l /isodevice 回车，再使用组合健“CTRL+ALT+F7”进入图形界面，点击安装Linux吧，随便你怎么装了.
+
+7、安装完成Linux后重启，可能有两种情况出现：
+
+第一：直接进入Winodows7，刚装的Linux系统毛都没看到，如果是这样，那么恭喜你，成功了！此时，再打开EasyBCD，
+把刚才的那个“NeoGrub”删除掉，点击“Add New Entry-->Linux/BSD”，Type项选择GRUB2，Name随便写，
+再点“Add Entry”按钮，最后把C盘下刚才拷进去的initrd.lz和vmlinuz两个文件删除掉，重启，选择你的Linux进去爽吧！
+
+第二、如果启动时，发现是Grub引导，最后一项才是Windows7，选择Windows7，进入Windows7系统，使用MBR修复
+工具（MbrFix.exe）把GRUB覆盖掉（下载MbrFix.exe文件，使用管理员身份运行CMD.exe，转到MbrFix.exe所在的目录，
+然后运行命令：MbrFix /drive 0 fixmbr /yes 即可修复MBR引导），再按照第一种情况操作即可完美实现双系统！
+
+8、卸载Linux系统或者卸载Windows系统，卸载Linux系统时，最好是先运行MbrFix.exe程序（参照第7项的第二条），
+然后就可以在Winodows7下直接删除Linux分区了，整个过程不用重启，什么都不用，爽！如果是想重装Windows，直接重装即可，
+装完成后再装EasyBCD，按照第7项的第一条进行添加Linux引导即可.

@@ -1,0 +1,49 @@
+1.JDK（jre+jdt）
+http://www.oracle.com/technetwork/indexes/downloads/index.html#java
+
+为了配置JDK的系统变量环境，我们需要设置三个系统变量，分别是JAVA_HOME，Path和CLASSPATH。下面是这三个变量的设置防范。
+JAVA_HOME
+先设置这个系统变量名称，变量值为JDK在你电脑上的安装路径：C:\Program Files\Java\jdk1.8.0_20
+创建好后则可以利用%JAVA_HOME%作为JDK安装目录的统一引用路径。
+Path
+PATH属性已存在，可直接编辑，在原来变量后追加：;%JAVA_HOME%\bin;%JAVA_HOME%\jre\bin
+CLASSPATH
+设置系统变量名为：CLASSPATH  变量值为：.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar
+注意变量值字符串前面有一个"."表示当前目录，设置CLASSPATH 的目的，在于告诉Java执行环境，在哪些目录下可以找到您
+所要执行的Java程序所需要的类或者包。
+
+
+2.eclipse的java-IDE,带JDT插件
+http://www.eclipse.org
+
+Java的开发环境已经准备好了。我们要通过Eclipse来开发Android应用程序，那么我们需要下载Android SDK
+（Software Development Kit）和在Eclipse安装ADT插件，
+这个插件能让Eclipse和Android SDK关联起来。
+
+3.android-SDK，工具和文档
+4.eclipse的android development tools（ADT插件）
+
+
+更改host文件
+首先更改host文件，host文件在C:\Windows\System32\drivers\etc目录下，用记事本打开“hosts”文件，
+将下面两行信息追加到hosts文件末尾，保存即可。如果你的是windows8系统可能没有权限修改host文件，
+可以右击hosts文件，将Users组设置为可对hosts文件完全控制的权限即可。
+
+203.208.46.146 dl.google.com
+203.208.46.146 dl-ssl.google.com
+74.125.113.121    developer.android.com
+64.233.189.123    dl.google.com
+64.233.189.123    dl-ssl.google.com
+
+上面两行放在host文件的意思是将本地访问dl.google.com和dl-ssl.google.com定向到ip地址为203.208.46.146的服务器上。
+
+
+---在线安装ADT的方法：
+启动Eclipse，点击 Help菜单 -> Install New Software… ?，点击弹出对话框中的Add… 按钮。
+Location中输入：http://dl-ssl.google.com/android/eclipse/，Name可以输入ADT，点击“OK”按钮。
+
+
+---==============================================================================
+--真机调试：
+1.修改 AndroidManifest.xml 文件，将app注册为Debuggable。
+   <application ... android:debuggable="true">

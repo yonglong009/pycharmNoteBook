@@ -1,0 +1,9 @@
+#vim /etc/profile
+#++++++++++++++++++++++++++++++++++++++
+export JAVA_HOME=/home/jdk1.7.0_17
+export PATH=$PATH:/home/jdk1.7.0_17/bin
+export CLASSPATH=.:/home/jdk1.7.0_17/lib/dt.jar:/home/jdk1.7.0_17/lib/tools.jar　　// .后面是：(冒号)，在linux系统中分隔用：来表示
+export JAVA_HOME PATH CLASSPATH 　　// 修改该profile文件，在后面加上我们的环境变量，类似于windows的环境变量配置
+#++++++++++++++++++++++++++++++++++++++
+保存退出，执行:
+#source /etc/profile　　// 这条命令是让配置马上生效，

@@ -1,0 +1,11 @@
+http://blog.chinaunix.net/uid-27685749-id-3357144.html
+
+1.图片处理： pillow
+pip install pillow
+
+
+# IT 最大的指南网站：
+# http://www.tutorialspoint.com/index.htm
+
+#网页抓包：fiddler
+http://www.telerik.com/fiddler

@@ -1,0 +1,23 @@
+http://python.jobbole.com/81332/
+
+
+
+requests 文档：
+http://www.python-requests.org/en/latest/
+
+
+re：
+http://python.jobbole.com/81346/
+
+
+beautifulSoup:
+http://www.crummy.com/software/BeautifulSoup/bs4/doc/index.html
+
+
+
+
+pyH, 写html：
+http://hanxiaomax.github.io/trans/pyh-chinese-doc/
+
+主题网页？？？？
+http://hanxiaomax.github.io/theme-setup/

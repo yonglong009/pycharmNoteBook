@@ -1,0 +1,74 @@
+1.Apache 配置文件：~$Apache\conf\httpd.conf
+--关键词：
+ServerRoot "c:/Apache24"           --#是Apache的安装目录，按照自己的实际情况（解压到哪就写什么）填写.
+ServerAdmin admin@example.com      --#这是Apache管理员Email地址，改不改无所谓。
+#ServerName www.example.com:80     --#这是Apache的服务器地址，把前面的”#“去掉，把”www.example.com“改成”localhost“。
+DocumentRoot "c:/Apache24/htdocs"  --#这个是网站的根目录，可以自己修改，这里我改成“H:/Web”。--E:\About_PHP\my_web_home
+<Directory "c:/Apache24/htdocs">   --#这个也是网站根目录，但是必须和上面的DocumentRoot改成一样，否则无法打开网站。
+DirectoryIndex index.html          --#这个是网站的首页设置，比如“index.php”等。这里我改成“DirectoryIndex index.php
+                                        index.htm index.html”。
+
+ScriptAlias /cgi-bin/ "c:/Apache24/cgi-bin/"    --#这个是Apache服务器的关键文件目录，要修改为自己Apache的安装
+                                                       目录下的“cgi-bin”文件夹。
+<Directory "c:/Apache24/cgi-bin">               --和[ScriptAlias /cgi-bin/ "c:/Apache24/cgi-bin/"]改成一样的。
+--Apache 配置完毕
+
+/*
+打开Apache service monitor，在service status列表下，竟然没有一个服务，为什么？当然是apache 安装时候出问题了，该怎么办？根据经验，
+应该是Apa服务安装失败了，怎么安装呢？
+打开cmd窗口，进入Apache的bin目录，大致如下：
+	cd  /d D:/Program Files/Apache Software Foundation/Apache2.2/bin
+	输入：httpd -k install  回车，即可自动安装Apache服务。
+	再次打开Apache service monitor，就能看到服务了哦。
+将Apache安装为Windows NT服务,被安装的服务名称将是：Apache2 ，配置文件将使用conf/httpd.conf
+
+--===============================================================================================================
+将 Apache 2.4.16 安装为系统服务：
+1,确定你没有打开“httpd.exe”文件
+2,现在开始安装服务器，关闭刚才打开的命令行窗口，在“[Apache_home]\bin”下创建一个文本文件，内容为:
+httpd.exe -k install -n "Apache2.4"
+Pause
+然后把它改名为“install.cmd”，并运行文件，如果不提示错误，那就说明安装成功了。“服务”也会有Apache24这个服务项。这个时候可以选择启动，
+    启动Apache服务。
+3,以后可以通过“[Apache_home]\bin”文件夹下的“ApacheMonitor.exe”来控制这个Apache。任务栏也会有显示这个软件的很方便的管理Apache的运行。
+--===================================================================================================================
+如何卸载 Apache ？
+1,很简单，在“[Apache_home]\bin”目录下创建一个文本文件，内容为:
+httpd.exe -k uninstall -n "Apache2.4"
+Pause
+然后把它改名为“uninstall.cmd”，并运行文件，就可以卸载Apache了。当然创建一个“uninstall”文件很有必要，以方便以后卸载Apache，
+    只要运行“uninstall.cmd”文件，就行了。
+2,然后你就可以将Apache文件夹和PHP文件夹删掉，就可以了。
+--=================================================================================================================
+注意：.httpd.conf配置错误
+apache的配置文件httpd.conf出错，在windows里启动它，会提示the requested operation has failed。解决方法：用命令行模式启动apache，
+并带上参数，apache会提示你哪句有误，然后就可以针对性的解决，命令如下： httpd.exe -w -n "Apache2" -k start
+*/
+
+
+2.PHP配置：
+将下载到的压缩包（php-5.6.13-Win32-VC11-x86.zip）解压，这里以“D:\PHP56”为例。将PHP56目录下的php.ini-production改名为"php.ini"。
+--(可选)添加系统环境变量：path  ;D:\PHP56;D:\PHP56\ext;
+--修改php.ini 配置PHP环境：
+--关键词：
+; extension_dir = "ext"   --;把前面的“;”去掉，这个是指向扩展库目录的路径（需要指向存放 PHP 扩展库文件的目录），
+                                可以是绝对路径（如 "J:\PHP\ext"）或
+                          --;相对路径（如 "ext"）。这里它已经帮你写好了，只要稍稍修改一下即可。
+
+; extension=***            --;从第878行开始，就是PHP的扩展库的开关设置，如果需要打开，只需要把相应的扩展库的前面的“;”去掉即可。
+--;这里按照平时的使用需要和习惯，我依次打开php_fileinfo.dll、php_gd2.dll、php_mysql.dll、php_mysqli.dll、php_pdo_mysql.dll
+
+
+
+3.Apache 和 PHP  的整合（绑定）：
+打开“[Apache_home]\conf\httpd.conf”。在中间插入一段文字：
+
+##-------------------------Link-With-PHP-------------------------------
+LoadModule php5_module "E:/About_PHP/dev_tools_ide/php56/php5apache2_4.dll"
+#AddHandler application/x-httpd-php .php
+AddType application/x-httpd-php .php
+AddType application/x-httpd-php .html
+AddType application/x-httpd-php .htm
+PHPIniDir "E:/About_PHP/dev_tools_ide/php56/"
+##-------------------------Link-With-PHP-------------------------------
+
