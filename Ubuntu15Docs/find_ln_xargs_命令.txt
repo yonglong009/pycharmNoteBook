@@ -1,0 +1,44 @@
+ln -i src_path tar_path     #建立硬链接，inode +
+ln -s src_path tar_path     #建立软链接，即：符号链接。
+
+find与xargs
+find path -options [-print -exec -ok]
+#options:
+-name 按照文件名查找文件。
+-perm 按照文件权限来查找文件。
+-user 按照文件属主来查找文件。
+-group 按照文件所属的组来查找文件。
+-mtime -n +n 按照文件的更改时间来查找文件, -n表示文件更改时间距现在n天以内,
+             +n表示文件更改时间距现在n天以前。
+             find命令还有-atime和-ctime选项
+-newer file1!file2 查找更改时间比文件file1新但比文件file2旧的文件。
+-depth 在查找文件时,首先查找当前目录中的文件,然后再在其子目录中查找。
+-follow 如果find命令遇到符号链接文件,就跟踪至链接所指向的文件。
+#e.g:
+find ~ -name "*.rar" -print
+find /etc -name "host*" -print
+find . -name "[a-z][a-z][0-9][0-9].txt" -print
+find . -perm 644 -print
+find . -mtime -1 -name "vim*" -print   #修改1天以内的文件
+find . -mtime +1 -name "vim*" -print   #1天以前的文件
+#查找10分钟以内修改的文件：
+	touch -t 10051740 dateStamp
+	find . -newer dateStamp -print
+find . -newer dateStamp ! -newer xx.txt -print   #新于dateStamp ，不新于xx.txt
+find . -type d -print  #查找目录文件
+find . ! -type d -print
+find . -type l -print  #搜索符号链接文件
+#-exec 一般用于查找文件列出，然后确认删除：
+find . -name "m*.log" -type f -exec ls -l {} \;   #分号必须
+find . -name "m*.log" -type f -mtime +5 -exec rm {} \;    #删除5日以上的日志文件
+find . -name "m*.log" -type f -ok rm -r {} \;   #-ok 是提示模式
+#================================================args======find===========
+Find命令把匹配到的文件传递给 xargs命令,而xargs命令每次只获取一部分文件而不是全部,
+不像 -exec选项那样，-exec会引起参数溢出。
+find . -type f -print | xargs grep "yonglog"    #常用，查找某字符串
+
+
+
+
+
+

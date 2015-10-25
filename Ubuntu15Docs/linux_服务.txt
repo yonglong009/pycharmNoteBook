@@ -1,0 +1,97 @@
+11.1服务简介
+Linux 系统服务有时也称为守护程序，是在Linux启动时自动加载并在Linux退出时自动停止的系统任务。
+在Linux 启动过程中我们可以看得很多starting … 提示信息，该信息表示正在启动系统服务，而在Linux 退出时，
+我们也能够看到相应的Stopping … 信息，表示系统服务正在停止。
+Linux自身有许多系统任务如network 服务用于支持网络连接等。
+11.1.1 服务分类
+根据守护程序的启动与管理方式可分独立启动与超级守护程序两种。
+1. 独立启动程序
+独立启动快，但常驻内存，占资源。
+2. 超级守护程序
+超级守护程序平时不启动，只是由一个xinet服务启动，有请求时xinet先响应，再去启动实际的服务如ftp，没有任务时，
+处理睡眠状态，反应时间慢。
+以上两种服务可以同时存在。
+11.1.2 服务有关端口信息
+有关端口信息可以看/etc/services相关内容。
+11.1.3 守护程序的命名
+守护程序或服务的命名通常在相关命令后面加一个字母d来命名，如at与cron服务，会被称为atd与crond，以xxxd的程序
+就是守护程序。
+11.1.4 守护程序的位置
+独立启动程序与超级守护程序的shell脚本放置的位置不同。
+1. 独立启动程序
+独立启动程序放在/etc/init.d/目录里。RPM软件的启动都在这里。
+2. 超级守护程序
+超级守护程序放在/etc/init.d/xinetd/目录里。
+配置文件：
+/etc/xinetd.conf    超级守护程序的配置文件
+/etc/xinetd.d/*     其它单个服务的配置文件
+如：telnet服务的配置文件 /etc/xinetd.d/telnet
+启动脚本：
+/etc/init.d/xinetd  它自己是做为一个独立启动程序来启动的。如有telnet服务来的时候它才会去启动
+/etc/init.d/xinetd/telnet服务。
+11.1.5 守护程序的启动
+service程序是一个脚本，它根据参数会调动/etc/init.d中的服务名称脚本。只能用于独立启动服务的启动，有三种状态。
+start     启动
+stop      停止
+restart   重启
+1. 独立启动程序启动
+/etc/init.d/smb start
+service smb start
+
+2. 超级守护程序启动
+超级守护程序启动服务通常是不启用的，如果要使用的话，还需要事先配置相应服务的配置文件才能使用。
+vi /etc/xinetd.d/telnet
+# default: on
+# description: The telnet server serves telnet sessions; it uses \
+#       unencrypted username/password pairs for authentication.
+service telnet
+{
+        disable = no                    需要手动打开才行
+        flags           = REUSE
+        socket_type     = stream       
+        wait            = no
+        user            = root
+        server          = /usr/sbin/in.telnetd
+        log_on_failure  += USERID
+}
+telnet服务安装好后默认是关闭的，需要disable = no打开，然后设为开机自启动。
+/etc/init.d/xinetd/telnet start
+超级守护程序安装与启动可参见第十六章。
+11.2系统打开的服务
+11.2.1观察系统服务
+示例：
+netstat -tulp   显示当前系统打开的网络服务
+netstat -lnp    显示所有监听的网络服务
+netstat -anp    显示所以网络连接状态
+示例：
+chkconfig --list |more  显示当前系统打开的服务
+chkconfig --list |grep smb    过滤显示某一服务
+
+11.2.2设置服务开机启动
+1.使用服务
+示例：
+chkconfig --level 345 smb on  打开smb服务
+chkconfig --level 345 smb off 关闭smb服务
+chkconfig smb on              同上功能上样
+2.使用自动运行
+/etc/rc.d/rc.local文件，在里面写入开机时启动的脚本。
+11.2.3服务添加与删除
+1.添加服务
+将该自己写的服务的脚本文件abc拷入/etc/init.d文件夹下保证其状态可执行,再使用chkconfig 命令将服务添加到服务列表中。
+示例：
+chkconfig --add abc
+将服务添加以后该服务即可以使用service 来启动/停止了。
+chkcofig命令会在/etc/rc.d/*等相关文件夹中放入到/etc/init.d/abc的快捷方式，此操作是由chkconfig自动完成的。
+
+2.删除服务
+如果要删除某项服务将上述命令的add 改为del 即可
+示例：
+chkconfig --del abc
+
+11.2.4其它服务配置命令
+1.ntsysv
+Redhat与FC系统提供图形界面管理工具。
+
+2.setup
+Setup也是调用的ntsysv工具进行管理的。
+=====================================================

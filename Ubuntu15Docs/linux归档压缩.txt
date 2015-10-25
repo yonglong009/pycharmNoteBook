@@ -1,0 +1,64 @@
+
+#=======   tar 归档   ===========
+mayl@Ubun15:~/bash_box$ tar -cvf tarout.tar tar1.txt tar2.py tardir/         #创建tarball
+mayl@Ubun15:~/bash_box$ tar -tvf tarout.tar               #table，显示出tarball的内容。
+mayl@Ubun15:~/bash_box$ tar -rvf tarout.tar baidu.txt     #向tarball追加文件
+
+mayl@Ubun15:~/bash_box$ tar -xvf tarout.tar                    #exact，提取所有文件到当前目录
+mayl@Ubun15:~/bash_box$ tar -xvf tarout.tar -C ./destdir/      #提取所有文件到指定目录
+
+mayl@Ubun15:~/bash_box$ tar -vf tarout.tar --delete tar1.txt   #从tarball中删除文件
+mayl@Ubun15:~/bash_box$ tar -tvf tarout.tar                    #删除后再显示出tarball的内容。
+
+$tar --exclude-vcs -czvf src_code.tar.gz ./my_src_code      #排除版本控制文件后归档压缩源代码 （常用）
+
+##======= tarball 文档的压缩：
+-j	指定bunzip2格式压缩=bz2
+-z	指定gzip格式压缩=gz
+-lzma
+
+#===== gzip
+mayl@Ubun15:~/bash_box$ gzip baidu.txt  
+baidu.txt.gz           #gzip 压缩后删除原文件。
+
+mayl@Ubun15:~/bash_box$ gzip -l baidu.txt.gz          #list 列出压缩文件信息
+         compressed        uncompressed  ratio uncompressed_name
+                926                1996  55.0% baidu.txt
+
+mayl@Ubun15:~/bash_box$ gunzip baidu.txt.gz           #解压，
+
+#===== bzip2
+mayl@Ubun15:~/bash_box$ bzip2 baidu.txt 
+baidu.txt.bz2	       #bzip2 压缩后删除原文件。
+mayl@Ubun15:~/bash_box$ bunzip2 baidu.txt.bz2         #解压，
+
+#----------------------------归档 并 压缩 --- gzip ---------
+mayl@Ubun15:~/bash_box$ tar -czvf baidu.tar.gz baidu.txt      #归档 并 压缩
+mayl@Ubun15:~/bash_box$ tar -tvf baidu.tar.gz 		      #table 列出归档压缩包含的文件
+mayl@Ubun15:~/bash_box$ tar -xzvf baidu.tar.gz -C ./destdir/  #解压到指定目录
+#----------------------------归档 并 压缩 --- bzip2 ---------
+mayl@Ubun15:~/bash_box$ tar -cjvf baidu.tar.bz2 baidu.txt       #归档 并 压缩
+mayl@Ubun15:~/bash_box$ tar -tvf baidu.tar.bz2 			#table 列出归档压缩包含的文件
+mayl@Ubun15:~/bash_box$ tar -xjvf baidu.tar.bz2 -C ./destdir/   #解压到指定目录
+
+
+
+#=======   cpio    ===========
+cpio 通过stdin获取输入文件名，并将归档文件写入stdout，所以必须将stdout重定向到一个文件，以接受cpio输出。
+
+一般用法： ls [] |cpio -o >arch.cpio     或者   find [] |cpio -o >arch.cpio
+
+#================================================
+mayl@Ubun15:~/bash_box$ rsync -avz /home/mayl/bash_box/ /home/mayl/Desktop/bash_bak/   #备份镜像
+
+
+
+#wget 镜像一个网站：
+mayl@Ubun15:~/Documents/python_leans/wget_dive_3$ wget -r -p -np -k http://woodpecker.org.cn/diveintopython3/
+wget -r -p -np -k https://docs.python.org/3.1/index.html
+wget -c https://docs.python.org/3.1/whatsnew/2.3.html
+wget -r -p -np -k https://docs.python.org/3.1/whatsnew/2.3.html
+
+
+
+wget -r -p -np -k http://docs.jinkan.org/docs/jinja2/

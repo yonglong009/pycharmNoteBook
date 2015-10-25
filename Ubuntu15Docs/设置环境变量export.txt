@@ -1,0 +1,18 @@
+如果只为1~2条命令不建议添加到路径里面，直接把你要添加的命令做个软连接
+到/usr/sbin下面去
+ln -s 命令 /usr/sbin/命令
+
+还有就是修改root目录下的/root/.bash_profile
+PATH=$PATH:$HOME/bin
+PATH=$PATH:/usr/local/nginx/sbin
+#上面演示了怎么把nginx的命令添加到命令的默认路径
+export PATH 
+个人的命令可以修改~/.profile
+PATH=$PATH:/home/username
+export PATH
+
+还可以直接用export命令设置环境变变量：（当次暂时有效）
+#export PATH=$PATH:/opt/au1200_rm/build_tools/bin
+查看是否已经设好，可用命令export查看：
+#export    #显示全部环境变量
+#echo $PATH  #显示程序搜索路径

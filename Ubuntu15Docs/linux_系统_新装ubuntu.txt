@@ -1,0 +1,140 @@
+根 (/) 目录下，有一组重要的系统目录，在大部分 Linux 发行版里都通用。直接位于根 (/) 目录下的常见目录列表如下：
+
+    /bin - 重要的二进制 (binary) 应用程序
+    /boot - 启动 (boot) 配置文件
+    /dev - 设备 (device) 文件
+    /etc - 配置文件、启动脚本等 (etc)
+    /home - 本地用户主 (home) 目录
+    /lib - 系统库 (libraries) 文件
+    /lost+found - 在根 (/) 目录下提供一个遗失+查找(lost+found) 系统
+    /media - 挂载可移动介质 (media)，诸如 CD、数码相机等
+    /mnt - 挂载 (mounted) 文件系统
+    /opt - 提供一个供可选的 (optional) 应用程序安装目录
+    /proc - 特殊的动态目录，用以维护系统信息和状态，包括当前运行中进程 (processes) 信息。
+    /root - root (root) 用户主文件夹，读作“slash-root”
+    /sbin - 重要的系统二进制 (system binaries) 文件
+    /sys - 系统 (system) 文件
+    /tmp - 临时(temporary)文件
+    /usr - 包含绝大部分所有用户(users)都能访问的应用程序和文件
+    /var - 经常变化的(variable)文件，诸如日志或数据库等 
+
+切换到 root 用户 ，输入 “sudo -i ”或“sudo su -”, 退出 “exit” 
+
+
+    从 Multiverse 软件库中安装 rar 软件包 (参见 2 ― 添加、删除和更新应用程序)。
+    运行：
+        sudo ln -fs /usr/bin/rar /usr/bin/unrar 
+    要打开 rar 文件，双击该文件即可。 
+
+===========================================================================
+Shell环境初始化的顺序
+1. shell运行正确的系统登录脚本，这个脚本初始化用户的环境。系统登录脚本定义一个默认的环境，这个脚本可以由系统管理员定制。
+如果shell是..... 系统登录脚本是.... 
+POSIX(/usr/bin/sh) /etc/profile 
+由于这个系统登录脚本在所有用户登录的时候都会运行，系统管理员可以通过修改这个文件来为所有用户设置默认环境变量。
+这种特性还可以让每一个用户在登录系统时执行一些基本的命令。
+$echo $PATH
+	PATH信息：PATH定位包含可执行文件,库文件及一般文本文件的目录位置,便于用户快速访问。
+2. shell运行在用户的home目录下的用户的本地登录脚本（如果存在）。
+如果shell为..... 本地登录脚本为.... 
+POSIX(/usr/bin/sh .profile 
+在典型情况下，系统管理员在最初创建用户帐号时，会为每个用户创建一个本地的登录脚本。如果使用useradd命令来添加一个用户，
+它会拷贝默认本地登录脚本文件（/etc/skel/.profile)到这个用户的home目录下。用户可以自己继续修改这个文件来定制他们
+的环境变量，以满足自己的需要。
+
+=====================新装 Ubuntu
+一：搜狗拼音输入法安装
+1.fcitx
+$sudo apt-get install fcitx-bin
+
+2.im-config
+default  :fcitx
+
+3.
+$sudo dpkg -i sogoupinyin_1.2.0.0056_amd64.deb 
+...
+$dpkg -l |grep ".*pinyin.*"
+ii  sogoupinyin
+
+4.
+$fcitx-config-gtk3
++sogoupinyin
+
+5.
+reboot
+
+二：Ubuntu 耳机无声
+mayl@Ubun15:~$ mp-hibernate
+No command 'mp-hibernate' found, did you mean:
+ Command 'pm-hibernate' from package 'pm-utils' (main)
+mp-hibernate: command not found
+mayl@Ubun15:~$ sudo apt-get install pm-utils
+mayl@Ubun15:~$ sudo pm-hibernate
+
+
+三：
+sudo apt-get install unity-tweak-tool
+sudo apt-get install synaptic     #新立得
+
+Gedit编码：
+sudo apt-get install dconf-editor
+1、解决gedit乱码。
+启动dconf-editor
+org-gnome-gedit-preferences-encodings。两行都在左边加
+'GB18030',
+2、取消桌面共享加密选项，让windows下VNC客户端能正常连接
+启动Dconf-editor
+org > gnome > desktop > applications > remote-access
+取消钩选 "REQUIRE-ENCRYPTION"属性。即可在windows下用UltraVNC Viewer正常连接。
+3、桌面共享端口号。
+org > gnome > desktop > applications > remote-access
+先钩选enabled和use_alternative_port，再修改右边alternative_port属性。（默认是5900）
+
+四：
+Ubuntu软件中心，安装Samba。为文件共享必须软件组件。
+Ubuntu软件中心，安装nautilus-open-terminal。可实现在文件夹空白处右键-在终端中打开，避免频繁在终端中输入cd命
+令转换目录的麻烦
+
+
+
+
+六、*按具体需求安装－iptables防火墙
+1、linux下默认只能root用户打开1024以下得端口，开启8080等大于1024的端口，然后使用iptables重定向来达到“其他
+用户程序使用80端口”的目的。
+2、启动终端并输入
+sudo su
+iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8081
+iptables-save > /etc/firewall.sh
+gedit /etc/network/interfaces
+interfaces文件末尾增加一行
+pre-up iptables-restore < /etc/firewall.sh
+
+七、*按具体需求安装－SSH登录服务
+1、安装SSH Server
+Ubuntu14.04默认没有安装OpenSSH Server，因此需要手动安装。
+Ubuntu软件中心，安装OpenSSH Server，也可在终端中输入
+sudo apt-get install openssh-server
+2、更改SSH的端口号
+在终端中输入“sudo nautilus”，以管理员权限打开文件管理器。
+ssh-server配置文件路径为/etc/ssh/sshd_config
+sshd_config文件定义了SSH的服务端口，更改第四行中的端口号为自定义的端口：
+port 22
+更改为
+port 7177
+3、让 OpenSSH 登录时间更短，并更安全
+　　远程登录的时候可能会发现，在输入完用户名后需要等很长一段时间才会提示输入密码。其实这是由于 sshd 需要反查
+客户端的 dns 信息导致的。可通过禁用该特性来大幅提高登录的速度。打开 sshd_config 文件，
+找到 GSSAPI options 这一节，将下面两行注释掉：
+#GSSAPIAuthentication yes #GSSAPIDelegateCredentials no
+然后重新启动计算机，或在终端中重启 ssh 服务
+/etc/init.d/ssh restart
+
+八、桌面快捷方式
+1、重启服务的快捷方式
+以重启tomcat7为例。在桌面新建retomcat7.sh的文本文件，并赋予运行权限，文件中内容如下
+sudo service tomcat7 restart
+双击，并点击运行，输入管理员密码即可
+2、管理员权限文件管理器的快捷方式
+在桌面新建root manager.sh的文本文件，并赋予运行权限，文件中内容如下
+sudo nautilus
+双击，并点击运行，输入管理员密码即可

@@ -1,0 +1,39 @@
+命令执行控制。
+命令组合。
+如果希望在成功地执行一个命令之后再执行另一个命令,或者在一个命令失败后再执行
+另一个命令,&&和||可以完成这样的功能。相应的命令可以是系统命令或 shell脚本。
+Shell还提供了在当前 shell或子shell中执行一组命令的方法,即使用()和 {}。
+
+
+命令1 && 命令2
+这种命令执行方式相当地直接。 &&左边的命令(命令 1)返回真 (即返回0,成功被执行)
+后,& &右边的命令(命令 2)才能够被执行;换句话说,“如果这个命令执行成功 &&那么执
+行这个命令”。
+$cp a.txt a.txt.bak && echo "if you see this then the copy is OK."
+$mv /apps/bin /apps/bin_bak && rm -r /apps/bin
+
+
+命令1 || 命令2
+||的作用有一些不同。如果||左边的命令(命令 1)未执行成功,那么就执行||右边的命令
+(命令2);或者换句话说,“如果这个命令执行失败了||那么就执行这个命令”。
+$cp a.txt a.txt.bak || echo "if you see this then the copy is Failed."
+$[command] || echo "mail to tall somethings" | mail yonglog
+	#command失败后邮件通知用户yonglog
+
+#==================================================
+ 用()和{ }将多个命令结合在一起
+为了在当前shell中执行一组命令,可以用命令分隔符隔开每一个命令,并把所有的命令
+用圆括号()括起来。
+它的一般形式为:
+(命令1;命令2;...)
+$[command] ||( echo "mail to tall somethings" | mail yonglog ; exit)
+	#command失败后邮件通知用户yonglog,然后退出shell
+
+如果使用 { }来代替(),那么相应的命令将在子shell而不是当前shell中作为一个整体被执
+行,只有在 {}中所有命令的输出作为一个整体被重定向时,其中的命令才被放到子shell中执
+行,否则在当前shell执行。它的一般形式为:
+{命令1;命令2;.. .}
+
+
+
+
