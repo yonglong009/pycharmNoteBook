@@ -2,7 +2,7 @@ https://github.com/
 
 acct:yonglong009
 e-mail:yonglong009@yeah.net
-passwd:log009Git
+passwd:
 
 
 
@@ -69,3 +69,11 @@ https://github.com/yonglong009/yonglog_git.git
 
 　　这样，你的工程就成功推送到github的服务器上了。
 
+===============================向github推送本地git目录===============================
+1.添加ssh
+2.在github上新建一个repository(pycharmNoteBook)，并自动生成.gitignore文件等。最后复制repo的ssh连接。
+3.在本地一个目录git init
+4.然后$git commit -a -m "local first commit,read push to github repo."
+5.关联github，$git remote add origin git@github.com:yonglong009/pycharmNoteBook.git
+6.拉取github的.gitignore文件等做同步，$git pull origin master
+7.最后将本地推送：$git push -u origin master
